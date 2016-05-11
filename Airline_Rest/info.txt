@@ -1,0 +1,62 @@
+http://localhost:8080/Airline_Rest/airlineForms
+http://localhost:8080/Airline_Rest/Flights
+http://localhost:8080/Airline_Rest/Passengers
+
+get all Passengers XML
+http://localhost:8080/Airline_Rest/airlineservices/rest/passengers
+
+get Passengers by id
+http://localhost:8080/Airline_Rest/airlineservices/rest/passengers/1
+
+
+get all Flights in JSON
+http://localhost:8080/Airline_Rest/airlineservices/rest/flights
+
+get Flight by id
+http://localhost:8080/Airline_Rest/airlineservices/rest/flights/1
+
+
+
+Create New Passenger
+POST
+http://localhost:8080/Airline_Rest/airlineservices/rest/passengers
+Content-Type
+application/json
+{
+    "firstName": "Cvetan",
+    "lastName": "Georgiev",
+    "dob": "1982-01-29T00:00:00.000",
+    "gender": "Male"
+      
+    }
+
+Update existing passenger by id (not all setting)
+PUT
+http://localhost:8080/Airline_Rest/airlineservices/rest/passengers/edit/1
+Content-Type
+application/json
+ {
+    "firstName": "Cvetan",
+    "lastName": "Georgiev",
+    "dob": "1982-01-29T00:00:00.000",
+    "gender": "Male"
+      
+    }
+ 
+Update existing passenger Entity Manager(overwrite all setting)
+PUT
+http://localhost:8080/Airline_Rest/airlineservices/rest/passengers/edit2/1
+{
+    "firstName": "Cvetan",
+    "lastName": "Georgiev",
+    "dob": "1982-01-29T00:00:00.000",
+    "gender": "Male"
+      
+    }
+    
+Delete Flight and pilots
+DELETE
+http://localhost:8080/Airline_Rest/airlineservices/rest/flights/1
+
+    
+ 
