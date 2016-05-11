@@ -1,0 +1,29 @@
+http://localhost:8080/MyOrderRest/index.jsp
+@GET
+application/json
+http://localhost:8080/MyOrderRest/api/users/1 
+@GET
+http://localhost:8080/MyOrderRest/api/orders/2 
+@GET
+http://localhost:8080/MyOrderRest/api/products/1
+@POST
+application/json
+http://localhost:8080/MyOrderRest/api/products/5
+{
+    "category": "Electronics",
+    "manufacturer": "ASUS",
+    "product": "Laptop",
+    "price": "2200"
+    }
+    
+@POST
+application/json
+http://localhost:8080/MyOrderRest/api/users/1 
+
+{
+    "username": "Ivan",
+    "password": "123"
+    }
+
+@DELETE
+http://localhost:8080/MyOrderRest/api/products/6 
