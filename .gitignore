@@ -2,6 +2,11 @@
 log/
 target/
 
+# Eclipse
+.classpath
+.project
+.settings/
+
 /bin/
 /Servers/
 
