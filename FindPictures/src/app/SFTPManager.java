@@ -3,12 +3,8 @@ package app;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.chrono.IsoChronology;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
@@ -81,19 +77,19 @@ public class SFTPManager {
 //		session.disconnect();
 		return channelSftp;
 	}
-
+	
+	// List all entries from myDir  
 	public static void getAllEntries(ChannelSftp channelSftp, String myDir) throws SftpException {
 		channelSftp.cd(myDir);
-
 		Vector<ChannelSftp.LsEntry> list = channelSftp.ls(myDir);
 		for(ChannelSftp.LsEntry entry : list) {
 			System.out.println(entry.getFilename());
 		}
 	}
-
+	
+	// List only entries from myDir which refer to "ext"
 	public static void getFiles(ChannelSftp channelSftp, String myDir) throws SftpException {
 		channelSftp.cd(myDir);
-
 		Vector<ChannelSftp.LsEntry> list = channelSftp.ls(myDir);
 		for(ChannelSftp.LsEntry entry : list) {
 			if (entry.getFilename().toString().endsWith(ext)) {
@@ -102,7 +98,8 @@ public class SFTPManager {
 			}
 		}
 	}
-
+	
+	// List only entries from myDir recursively which refer to "ext"
 	public static List<String> myStrings = new ArrayList<String>();
 
 	public static List<String> getFilesRecursivly(ChannelSftp channelSftp, String myDir) throws SftpException, IOException {
@@ -110,14 +107,13 @@ public class SFTPManager {
 
 		Vector<ChannelSftp.LsEntry> list = channelSftp.ls(myDir);
 		
-
 		for(ChannelSftp.LsEntry entry : list) {
 			if (entry.getAttrs().isDir()) {
 				if(isContain(entry.getFilename())) {
 					continue;
-					//					System.out.println(myDir + entry.getFilename());
+					// System.out.println(myDir + entry.getFilename() + " is stop by filter");
 				} else {
-					//					System.out.println(myDir + "/"  + entry.getFilename() + " is a Folder");
+					// System.out.println(myDir + "/"  + entry.getFilename() + " is a Folder");
 					String tempString = null;
 					if (myDir.equals("/") ) {
 						tempString = myDir + entry.getFilename().toString();
@@ -139,22 +135,16 @@ public class SFTPManager {
 	}
 	
 	public static  void printProperties(ChannelSftp channelSftp, List<String> myStrings) {
-
 		System.out.println();
 		if (myStrings.isEmpty()) {
 			System.out.println("No Files Found");
 		} else {
 			for (String file : myStrings) {
-
 				System.out.println(file);
-
 				BufferedImage img = null;
-
-
 				try {
 					InputStream is = channelSftp.get(file); 
 					img = ImageIO.read(is);
-
 					System.out.println(" width : " + img.getWidth());
 					System.out.println(" height: " + img.getHeight());
 					is.close();
@@ -165,7 +155,6 @@ public class SFTPManager {
 
 		}
 	}
-	
 
 	public static void close(ChannelSftp channelSftp) throws JSchException {
 		if (channelSftp.getSession() != null) {
@@ -176,25 +165,7 @@ public class SFTPManager {
 		}
 	}
 	
-	public static void main(String[] args) throws SftpException, IOException, JSchException {
-		System.out.println("===== START =====");
-		long startTime = System.currentTimeMillis();
-		
-		ChannelSftp channelSftp = myConnection();
-		//		getAllEntries(channelSftp, SFTPWORKINGDIR);
-		//		System.out.println("=============================================");
-		//		getFiles(channelSftp, SFTPWORKINGDIR);
-		//		System.out.println("=============================================");
-
-		List<String> myStrings = getFilesRecursivly(channelSftp, SFTP_WORKINGDIR);
-		printProperties(channelSftp, myStrings);
-
-
-		System.out.println("===== FINISH =====");
-		close(channelSftp);
-		
-		
-		long endTime   = System.currentTimeMillis();
+	public static void duration(long startTime, long endTime) {
 		long totalTime = endTime - startTime;
 		
 		int seconds = (int) (totalTime / 1000) % 60 ;
@@ -210,7 +181,30 @@ public class SFTPManager {
         sb.append(milisec);
         sb.append(" milsec.");
         
-		System.out.println(sb.toString());
+		System.err.println(sb.toString());
+	}
+	
+	
+	
+	public static void main(String[] args) throws SftpException, IOException, JSchException {
+		System.out.println("===== START =====");
+		long startTime = System.currentTimeMillis();
+		
+		ChannelSftp channelSftp = myConnection();
+		//		getAllEntries(channelSftp, SFTPWORKINGDIR);
+		//		System.out.println("=============================================");
+		//		getFiles(channelSftp, SFTPWORKINGDIR);
+		//		System.out.println("=============================================");
+
+		List<String> myStrings = getFilesRecursivly(channelSftp, SFTP_WORKINGDIR);
+		printProperties(channelSftp, myStrings);
+
+		System.out.println("===== FINISH =====");
+		close(channelSftp);
+		
+		long endTime   = System.currentTimeMillis();
+		duration(startTime, endTime);
+		
 	}
 
 }
